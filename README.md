@@ -5,16 +5,18 @@ This work is based on https://github.com/KITE-Cloud/AOWLN and has been expanded 
 This means that it can be used without Protégé to generate SWRL rules automatically of an OWL ontology as a jar application
 or as part of another java project.
 
-# How to Use
+# Installation
 
 The project can be used as a standalone java application or as part of another project
 
 ## Standalone application
 
-To use it as a standalone application, download the latest released jar package and execute it as follows
+To use it as a standalone application, download the latest released [package](https://github.com/vChavezB/aowln-sa/packages/2014167) with dependencies. 
+
+### Usage
 
 ```bash
-java -jar aowln-sa.jar MyOntology.rdf OutputDir
+java -jar aowln-sa-X.Y.Z-jar-with-dependencies.jar MyOntology.rdf OutputDir
 ```
 
 Where the first argument is the path to the serialized ontology and the second is the output directory for the 
@@ -38,17 +40,10 @@ Add dependency to `pom.xml`:
 Include github repository to `pom.xml`:
 
 ```yml
-  <repositories>
+ <repositories>
         <repository>
-            <id>github</id>
-            <name>GitHub VChavezB Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/vchavezb/*</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 ```
