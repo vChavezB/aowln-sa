@@ -11,7 +11,7 @@ The project can be used as a standalone java application or as part of another p
 
 ## Standalone application
 
-To use it as a standalone application, download the latest released [package](https://github.com/vChavezB/aowln-sa/packages/2014167) with dependencies. 
+To use it as a standalone application, download the latest released [package](https://github.com/vChavezB/aowln-sa/packages) with dependencies. 
 
 ### Usage
 
