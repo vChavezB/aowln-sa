@@ -1,4 +1,4 @@
-package utilities;
+package com.github.vchavezb.utilities;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;

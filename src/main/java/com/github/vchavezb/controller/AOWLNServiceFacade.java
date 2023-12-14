@@ -1,15 +1,15 @@
-package controller;
+package com.github.vchavezb.controller;
 
-import model.*;
+import com.github.vchavezb.model.*;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.SWRLAtom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swrlapi.core.SWRLAPIRule;
 import org.swrlapi.core.SWRLRuleRenderer;
-import utilities.AOWLNEngine;
-import utilities.GraphVizGenerator;
-import utilities.OWLUtil;
+import com.github.vchavezb.utilities.AOWLNEngine;
+import com.github.vchavezb.utilities.GraphVizGenerator;
+import com.github.vchavezb.utilities.OWLUtil;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;

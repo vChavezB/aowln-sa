@@ -1,4 +1,4 @@
-package model;
+package com.github.vchavezb.model;
 
 import java.util.ArrayList;
 import java.util.List;

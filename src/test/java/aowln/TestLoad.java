@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import controller.AOWLNServiceFacade;
+import com.github.vchavezb.controller.AOWLNServiceFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swrlapi.core.SWRLAPIRule;

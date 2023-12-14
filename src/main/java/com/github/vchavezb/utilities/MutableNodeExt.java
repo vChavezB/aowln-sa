@@ -1,4 +1,4 @@
-package utilities;
+package com.github.vchavezb.utilities;
 
 import guru.nidi.graphviz.model.MutableNode;
 

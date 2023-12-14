@@ -1,4 +1,4 @@
-package model;
+package com.github.vchavezb.model;
 
 /**
  * Created by Thomas Farrenkopf on 15.05.2017.

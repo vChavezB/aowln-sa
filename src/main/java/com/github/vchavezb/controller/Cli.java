@@ -1,4 +1,4 @@
-package controller;
+package com.github.vchavezb.controller;
 
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;

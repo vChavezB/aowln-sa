@@ -1,4 +1,4 @@
-package utilities;
+package com.github.vchavezb.utilities;
 
 import guru.nidi.graphviz.attribute.Attributes;
 import guru.nidi.graphviz.attribute.Label;
@@ -6,10 +6,10 @@ import guru.nidi.graphviz.attribute.Shape;
 import guru.nidi.graphviz.attribute.Style;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
-import model.EdgeTypeEnum;
-import model.GraphListsForViz;
-import model.NodeConnection;
-import model.NodeInfo;
+import com.github.vchavezb.model.EdgeTypeEnum;
+import com.github.vchavezb.model.GraphListsForViz;
+import com.github.vchavezb.model.NodeConnection;
+import com.github.vchavezb.model.NodeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.awt.image.BufferedImage;

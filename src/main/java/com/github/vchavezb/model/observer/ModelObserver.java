@@ -1,4 +1,4 @@
-package model.observer;
+package com.github.vchavezb.model.observer;
 
 import java.util.ArrayList;
 

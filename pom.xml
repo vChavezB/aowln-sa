@@ -6,7 +6,7 @@
 	<groupId>com.github.vChavezB</groupId>
 	<artifactId>aowln-sa</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.4</version>
+	<version>0.0.5</version>
 	<name>aowln-sa</name>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -87,7 +87,7 @@
                     <finalName>${project.artifactId}-${project.version}</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>controller.Cli</mainClass>
+                            <mainClass>com.github.vchavezb.controller.Cli</mainClass>
                         </manifest>
                     </archive>
                     <outputDirectory>JAR/</outputDirectory>

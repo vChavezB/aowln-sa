@@ -1,7 +1,7 @@
-package utilities;
+package com.github.vchavezb.utilities;
 
 
-import model.*;
+import com.github.vchavezb.model.*;
 import org.semanticweb.owlapi.model.*;
 import org.swrlapi.builtins.arguments.SWRLVariableBuiltInArgument;
 
