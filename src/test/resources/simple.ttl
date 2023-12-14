@@ -1,0 +1,115 @@
+@prefix : <http://www.semanticweb.org/vc9917e/ontologies/2023/11/untitled-ontology-370#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/vc9917e/ontologies/2023/11/untitled-ontology-370#> .
+
+<http://www.semanticweb.org/vc9917e/ontologies/2023/11/untitled-ontology-370> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled
+<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/vc9917e/ontologies/2023/11/untitled-ontology-370#hasData
+:hasData rdf:type owl:ObjectProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/vc9917e/ontologies/2023/11/untitled-ontology-370#Boat
+:Boat rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/vc9917e/ontologies/2023/11/untitled-ontology-370#Car
+:Car rdf:type owl:Class .
+
+
+#################################################################
+#    Rules
+#################################################################
+
+:c rdf:type <http://www.w3.org/2003/11/swrl#Variable> .
+
+:b rdf:type <http://www.w3.org/2003/11/swrl#Variable> .
+
+[ <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean ;
+   rdfs:comment "" ;
+   rdfs:label "S2" ;
+   rdf:type <http://www.w3.org/2003/11/swrl#Imp> ;
+   <http://www.w3.org/2003/11/swrl#body> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                           rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                       <http://www.w3.org/2003/11/swrl#classPredicate> :Boat ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> :c
+                                                     ] ;
+                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
+                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> :hasData ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> :c ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument2> :b
+                                                                ] ;
+                                                      rdf:rest rdf:nil
+                                                    ]
+                                         ] ;
+   <http://www.w3.org/2003/11/swrl#head> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                           rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                       <http://www.w3.org/2003/11/swrl#classPredicate> :Car ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> :b
+                                                     ] ;
+                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
+                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> :hasData ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> :b ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument2> :c
+                                                                ] ;
+                                                      rdf:rest rdf:nil
+                                                    ]
+                                         ]
+ ] .
+
+[ <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean ;
+   rdfs:comment "" ;
+   rdfs:label "S1" ;
+   rdf:type <http://www.w3.org/2003/11/swrl#Imp> ;
+   <http://www.w3.org/2003/11/swrl#body> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                           rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                       <http://www.w3.org/2003/11/swrl#classPredicate> :Car ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> :c
+                                                     ] ;
+                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
+                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> :hasData ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> :c ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument2> :b
+                                                                ] ;
+                                                      rdf:rest rdf:nil
+                                                    ]
+                                         ] ;
+   <http://www.w3.org/2003/11/swrl#head> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                           rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                       <http://www.w3.org/2003/11/swrl#classPredicate> :Boat ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> :b
+                                                     ] ;
+                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
+                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> :hasData ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> :b ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument2> :c
+                                                                ] ;
+                                                      rdf:rest rdf:nil
+                                                    ]
+                                         ]
+ ] .
+
+###  Generated by the OWL API (version 4.5.26.2023-11-26T01:45:50Z) https://github.com/owlcs/owlapi
