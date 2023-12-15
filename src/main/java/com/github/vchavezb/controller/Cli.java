@@ -19,6 +19,12 @@ public class Cli {
                 .description("Aided Owl Notation generation for SWRL");
         parser.addArgument("ontology").help("Ontology input file with swrl rules");
         parser.addArgument("outputDir").help("Output directory for rules");
+        parser.addArgument("-name","-n")
+                .help("Concatenate the rule name (i.e., rdfs:label)\n"+
+                        "to each rule. Example rule_1_MyRuleNameFromLabel.png\n"+
+                        "default [true]")
+                .type(Boolean.class);
+        parser.setDefault("name",false);
         Namespace ns = null;
         try {
             ns = parser.parseArgs(args);
@@ -42,9 +48,11 @@ public class Cli {
         logger.info("Creating rules");
         for (int rule_idx = 0; rule_idx < swrlRules.size(); rule_idx++) {
             SWRLAPIRule rule = swrlRules.get(rule_idx);
-            boolean res = facade.produceRuleImage(outDir.toPath(),
-                    "rule_"+rule_idx+"_"+rule.getRuleName(),
-                    rule);
+            String image_name = "rule_"+(rule_idx+1);
+            if (ns.getBoolean("name")) {
+                image_name+="_"+rule.getRuleName();
+            }
+            boolean res = facade.produceRuleImage(outDir.toPath(), image_name, rule);
         }
 
     }

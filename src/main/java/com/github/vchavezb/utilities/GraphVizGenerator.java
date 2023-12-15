@@ -45,17 +45,17 @@ public class GraphVizGenerator {
         for (NodeInfo node : nodes) {
             MutableNode mutNode = Factory.mutNode(node.getCaption());
             switch (node.getType()) {
-                case "Class":
-                    mutNode.add((Attributes) Shape.RECTANGLE);
+                case CLASS:
+                    mutNode.add(Shape.RECTANGLE);
                     break;
-                case "Property":
-                    mutNode.add((Attributes) Shape.ELLIPSE);
+                case PROPERTY:
+                    mutNode.add(Shape.ELLIPSE);
                     break;
-                case "BuiltInCollection":
-                    mutNode.add((Attributes) Shape.DIAMOND);
+                case BICOLLECTION:
+                    mutNode.add(Shape.DIAMOND);
                     break;
-                case "Variable":
-                    mutNode.add((Attributes) Shape.TRAPEZIUM);
+                case VARIABLE:
+                    mutNode.add(Shape.TRAPEZIUM);
                     break;
             }
             mutableNodes.add(new MutableNodeExt(mutNode, node.getType()));
@@ -76,21 +76,21 @@ public class GraphVizGenerator {
             if (child != null && parent != null) {
                 Link childLinkTo = child.getNode().linkTo();
                 if ((parent.getType().equals("Property") || child.getType().equals("Property")) && connection.getType().equals(EdgeTypeEnum.ObjectProperty))
-                    childLinkTo = childLinkTo.with((Attributes) Style.DASHED);
+                    childLinkTo = childLinkTo.with(Style.DASHED);
                 if (child.getType().equals("Class") && parent.getType().equals("Property") && connection.getType().equals(EdgeTypeEnum.Normal)) {
-                    childLinkTo = childLinkTo.with((Attributes) Style.SOLID);
+                    childLinkTo = childLinkTo.with(Style.SOLID);
                 } else if ((parent.getType().equals("Property") || parent.getType().equals("BuiltInCollection")) && child.getType().equals("Variable") &&
                         connection.getLabel() != null) {
-                    childLinkTo = childLinkTo.with((Attributes) Label.of(connection.getLabel()));
+                    childLinkTo = childLinkTo.with(Label.of(connection.getLabel()));
                 }
                 parent.getNode().addLink((LinkTarget) childLinkTo);
-                graph.add((LinkSource) parent.getNode());
+                graph.add(parent.getNode());
             }
         }
         if (connections.length == 0)
             for (MutableNodeExt node : mutableNodes)
-                graph.add((LinkSource) node.getNode());
-        int imageWidth = nodes.length * 250;
+                graph.add(node.getNode());
+        int imageWidth = nodes.length * PIXEL_PER_NODE;
         BufferedImage image = Graphviz.fromGraph(graph).width(imageWidth).render(Format.PNG).toImage();
         try {
             out.createNewFile();

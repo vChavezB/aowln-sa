@@ -6,7 +6,7 @@
 	<groupId>com.github.vChavezB</groupId>
 	<artifactId>aowln-sa</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.5</version>
+	<version>0.0.6</version>
 	<name>aowln-sa</name>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

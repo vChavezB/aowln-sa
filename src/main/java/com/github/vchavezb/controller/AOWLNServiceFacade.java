@@ -31,6 +31,12 @@ public class AOWLNServiceFacade {
         this.aowlnEngine = new AOWLNEngine();
         this.owlUtil = new OWLUtil();
     }
+
+    /**
+     * Load the ontology and obtain the list of SWRL Rules
+     * @param file String path to ontology
+     * @return
+     */
     public ArrayList<SWRLAPIRule> getOntologyRules(String file){
         // Create a SWRL rule engine using the SWRLAPI
         this.owlUtil.loadOntology(file);
@@ -54,6 +60,15 @@ public class AOWLNServiceFacade {
         return allRules;
     }
 
+    /**
+     * Produce an image from an SWRLRule
+     * @param OutDir Directory output of the image
+     * @param base_name Base name used for the rule. Two images will be generated with the format
+     *                      base_name-head.png
+     *                      base_name-body.png
+     * @param swrlRule SWRL Api rule
+     * @return True if success
+     */
     public boolean produceRuleImage(Path OutDir, String base_name, SWRLAPIRule swrlRule) {
         HashSet<SWRLAtom> body = new HashSet<SWRLAtom>(swrlRule.getBody());
         HashSet<SWRLAtom> head = new HashSet<SWRLAtom>(swrlRule.getHead());
@@ -134,14 +149,14 @@ public class AOWLNServiceFacade {
         GraphListsForViz vizListHead = aowlnEngine.megaAlgorithmus(headTree);
         GraphVizGenerator graphVizGenerator = new GraphVizGenerator();
 
-        File body_img = Paths.get(OutDir.toString(), "AOWLN_"+base_name + "-"+"BODY" + ".png").toFile();
+        File body_img = Paths.get(OutDir.toString(), base_name + "-"+"body" + ".png").toFile();
         boolean res = graphVizGenerator.produceImage(vizListBody, body_img);
         if (!res) {
             return false;
         }
         logger.info("Generated SWRL Rule [Body]\nRule: " +
                     swrlRule.getBody().toString()+"\nPath: "+body_img);
-        File head_img = Paths.get(OutDir.toString(), "AOWLN_"+base_name + "-"+"HEAD" + ".png").toFile();
+        File head_img = Paths.get(OutDir.toString(), base_name + "-"+"head" + ".png").toFile();
         res = graphVizGenerator.produceImage(vizListHead, head_img);
         if (!res) {
             return false;
@@ -150,8 +165,6 @@ public class AOWLNServiceFacade {
                 swrlRule.getHead().toString()+"\nPath: "+head_img);
         return true;
     }
-
-
 
     public List<String> getRulesAsStrings(ArrayList<SWRLAPIRule> rules) {
         ArrayList<String> SWRLRulesAsStrings = new ArrayList<>();

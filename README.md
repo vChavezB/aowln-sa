@@ -33,6 +33,7 @@ Add dependency to `pom.xml`:
  <dependency>
     <groupId>com.github.vchavezb</groupId>
     <artifactId>aowln-sa</artifactId>
+	<version>0.06</version>
   </dependency>
 </dependencies>
 ```
@@ -47,6 +48,11 @@ Include github repository to `pom.xml`:
         </repository>
     </repositories>
 ```
+
+## Usage
+
+Check the directory `src\test\java\aowln` for a simple example on how to load and produce
+images with the `AOWLNServiceFacade` class.
 
 
 
