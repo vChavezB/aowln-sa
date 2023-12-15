@@ -65,7 +65,7 @@ public class TestLoad {
         );
         for (int i = 0; i < swrlrules.size(); i++) {
             SWRLAPIRule rule = swrlrules.get(i);
-            boolean res = this.facade.produceRuleImages(tmpFolder.toPath(),"rule_"+i+"_"+rule.getRuleName(),rule);
+            boolean res = this.facade.produceRuleImage(tmpFolder.toPath(),"rule_"+i+"_"+rule.getRuleName(),rule);
             assertTrue ("Test swrl rules image created", res);
         }
     }

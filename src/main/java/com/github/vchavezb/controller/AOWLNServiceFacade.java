@@ -54,7 +54,7 @@ public class AOWLNServiceFacade {
         return allRules;
     }
 
-    public boolean produceRuleImages(Path OutDir, String base_name, SWRLAPIRule swrlRule) {
+    public boolean produceRuleImage(Path OutDir, String base_name, SWRLAPIRule swrlRule) {
         HashSet<SWRLAtom> body = new HashSet<SWRLAtom>(swrlRule.getBody());
         HashSet<SWRLAtom> head = new HashSet<SWRLAtom>(swrlRule.getHead());
         ArrayList<CustomSWRLAtom> bodyTree = aowlnEngine.createSWRLAtomsForTree(body);

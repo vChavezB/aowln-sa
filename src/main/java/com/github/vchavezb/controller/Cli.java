@@ -42,7 +42,7 @@ public class Cli {
         logger.info("Creating rules");
         for (int rule_idx = 0; rule_idx < swrlRules.size(); rule_idx++) {
             SWRLAPIRule rule = swrlRules.get(rule_idx);
-            boolean res = facade.produceRuleImages(outDir.toPath(),
+            boolean res = facade.produceRuleImage(outDir.toPath(),
                     "rule_"+rule_idx+"_"+rule.getRuleName(),
                     rule);
         }
