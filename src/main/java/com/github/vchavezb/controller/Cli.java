@@ -50,7 +50,7 @@ public class Cli {
             SWRLAPIRule rule = swrlRules.get(rule_idx);
             String image_name = "rule_"+(rule_idx+1);
             if (ns.getBoolean("name")) {
-                image_name = "rule_"+rule.getRuleName();
+                image_name = "rule_"+rule.getRuleName().replace(" ","_");
             }
             boolean res = facade.produceRuleImage(outDir.toPath(), image_name, rule);
         }

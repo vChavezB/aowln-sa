@@ -64,9 +64,9 @@ def add_swrl_images(html_content, css_filename, usename=False):
     entity_divs = soup.select("#swrlrules .entity")
 
     for i, entity_div in enumerate(entity_divs, start=1):
-        name_tag = entity_div.select_one("h2")
+        name_tag = entity_div.select_one("h3")
         if name_tag:
-            name = name_tag.text.strip()
+            name = name_tag.text.strip().replace(" ","_")
         else:
             name = "unknown"
 
@@ -174,9 +174,6 @@ def main():
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)
-
-    if args.warn_existing_images:
-        logging.info("Checking for existing image tags...")
 
     script_dir =  get_script_directory()
     resources_directory = Path(args.directory_path) / "resources"
