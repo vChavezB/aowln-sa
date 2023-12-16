@@ -21,7 +21,7 @@ public class Cli {
         parser.addArgument("outputDir").help("Output directory for rules");
         parser.addArgument("-name","-n")
                 .help("Concatenate the rule name (i.e., rdfs:label)\n"+
-                        "to each rule. Example rule_1_MyRuleNameFromLabel.png\n"+
+                        "to each rule. Example rule_MyRuleNameFromLabel.png\n"+
                         "default [true]")
                 .type(Boolean.class);
         parser.setDefault("name",false);
@@ -50,7 +50,7 @@ public class Cli {
             SWRLAPIRule rule = swrlRules.get(rule_idx);
             String image_name = "rule_"+(rule_idx+1);
             if (ns.getBoolean("name")) {
-                image_name+="_"+rule.getRuleName();
+                image_name = "rule_"+rule.getRuleName();
             }
             boolean res = facade.produceRuleImage(outDir.toPath(), image_name, rule);
         }
