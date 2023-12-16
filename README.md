@@ -19,8 +19,20 @@ To use it as a standalone application, download the latest released [package](ht
 java -jar aowln-sa-X.Y.Z-jar-with-dependencies.jar MyOntology.rdf OutputDir
 ```
 
-Where the first argument is the path to the serialized ontology and the second is the output directory for the 
-SWRL rules as images.
+Where:
+- `X.Y.Z`: aowln-sa semantic versioning
+- `MyOntology.rdf`: path to the serialized ontology
+- `OutputDir`: Output directory for the SWRL rules as images.
+- 
+The output will generate the pattern 
+
+- rule_`X`-`body`.png
+- rule_`X`-`head`.png
+
+where:
+- `X`: rule number ordered from declaration in the ontology
+- `head`: Head of the SWRL rule (i.e. after ->)
+- `body`: Body of the SWRL rule (i.e. before ->)
 
 ## Java project
 
@@ -33,7 +45,7 @@ Add dependency to `pom.xml`:
  <dependency>
     <groupId>com.github.vchavezb</groupId>
     <artifactId>aowln-sa</artifactId>
-	<version>0.06</version>
+    <version>0.0.6</version>
   </dependency>
 </dependencies>
 ```
