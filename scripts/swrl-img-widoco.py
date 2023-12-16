@@ -14,7 +14,7 @@ import os
 
 style_sheet_name = "swrl_style.css"
 
-def create_image_container(soup, rule_no, name, part, usename):
+def create_image_container(soup, rule_no, name, part, usename, width):
     """
     Create an image container for SWRL rules.
 
@@ -34,14 +34,14 @@ def create_image_container(soup, rule_no, name, part, usename):
     else:
         image_path = f"swrlrules/rule_{rule_no}-{part}.png"
 
-    image_tag = soup.new_tag("img", src=image_path, style="width: 100px; display: inline-block;",
+    image_tag = soup.new_tag("img", src=image_path, style="width: %dpx; display: inline-block;"%(width),
                              title=f"SWRL {part.capitalize()}")
     text_tag = soup.new_tag("a").string = part.capitalize()
     container.append(text_tag)
     container.append(image_tag)
     return container
 
-def add_swrl_images(html_content, css_filename, usename=False):
+def add_swrl_images(html_content, css_filename, usename=False,width=100):
     """
     Add SWRL images to the HTML content.
 
@@ -73,8 +73,8 @@ def add_swrl_images(html_content, css_filename, usename=False):
         paragraphs = entity_div.select("p")
 
         for j, paragraph in enumerate(paragraphs, start=1):
-            body_container = create_image_container(soup, i, name, "body", usename)
-            head_container = create_image_container(soup, i, name, "head", usename)
+            body_container = create_image_container(soup, i, name, "body", usename,width)
+            head_container = create_image_container(soup, i, name, "head", usename,width)
             grid_container = soup.new_tag("div", attrs={"class": "grid-container"})
             grid_container.append(body_container)
             grid_container.append(head_container)
@@ -92,7 +92,7 @@ def get_script_directory():
     """
     return Path(os.path.dirname(os.path.abspath(__file__)))
 
-def process_directory(directory_path, css_filename, usename=False):
+def process_directory(directory_path, css_filename, usename=False,width=100):
     """
     Process all HTML files in the specified directory.
 
@@ -110,7 +110,7 @@ def process_directory(directory_path, css_filename, usename=False):
         with open(file_path, 'r', encoding='utf-8') as file:
             html_content = file.read()
 
-        modified_content = add_swrl_images(html_content, css_filename, usename)
+        modified_content = add_swrl_images(html_content, css_filename, usename,width)
         if modified_content is None:
             continue
 
@@ -171,6 +171,8 @@ def main():
     parser.add_argument("directory_path", help="Path to the directory containing HTML files.")
     parser.add_argument("-name", action="store_true",
                         help="Use the name from the <h2> tag for image paths, i.e. the rdfs:label value")
+    parser.add_argument("-width", type=int,default=100,
+                        help="Max width of swrl images, change if they look too small")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)
@@ -180,7 +182,7 @@ def main():
     resources_directory.mkdir(exist_ok=True)
     shutil.copy(script_dir / style_sheet_name, resources_directory / style_sheet_name)
 
-    process_directory(args.directory_path, style_sheet_name, args.name)
+    process_directory(args.directory_path, style_sheet_name, args.name,args.width)
 
 if __name__ == "__main__":
     main()
