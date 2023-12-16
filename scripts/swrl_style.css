@@ -1,0 +1,12 @@
+/* Container holding the image and the text */
+.swrl-container {
+  position: relative;
+  text-align: center;
+  color: purple;
+  border: 1px solid powderblue;
+}
+/* Display swrl body and head images in a grid */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, min-content);
+}
