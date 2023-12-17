@@ -253,7 +253,11 @@ def main():
     parser = argparse.ArgumentParser(description="Add SWRL images to HTML files.")
     parser.add_argument("directory_path", help="Path to the directory containing HTML files.")
     parser.add_argument("-name", action="store_true",
-                        help="Use the name from the <h2> tag for image paths, i.e. the rdfs:label value")
+                        help="Use the name from the <h2> tag for image paths, i.e. the rdfs:label from the"+
+                               "swrl rules\nIf not set the img path will be automatically generated in the order\n"+
+                               "of appearance of the swrl rules in the crossref-xx.html page with format swrlrules/rule_{rule_no}-{part}.png"+
+                               "Use this option if the images do not correspond to the rule, typically this happens when the order\n"+
+                               "of the rules in the serialized ontology does not correspond to the one made by Widoco")
     parser.add_argument("-height", type=int,default=100,
                         help="Max height of swrl images, change if they look too small")
     args = parser.parse_args()

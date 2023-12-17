@@ -76,13 +76,13 @@ documentation project. To use it do the following.
 1. Create widoco documentation.
 3. Create swrl images with aowln-sa
     ```bash
-    java -jar aowln-sa-X.Y.Z-jar-with-dependencies.jar MyOntology.ttl YOUR_WIDOCO_DOC_PATH/swrlrules -name
+    java -jar aowln-sa-X.Y.Z-jar-with-dependencies.jar MyOntology.ttl YOUR_WIDOCO_DOC_PATH/swrlrules -name true
     ```
    where:
    - YOUR_WIDOCO_DOC_PATH: Path where Widoco documentation was generated
 2. Run awoln widoco script
     ```bash
-    python swrl-img-widoco.py YOUR_WIDOC_DOC_PATH -height 100
+    python swrl-img-widoco.py YOUR_WIDOC_DOC_PATH -height 100 -name
     ```
    Notes:
    - If the images result too small in the html visualization, change the optional
