@@ -32,7 +32,7 @@ def create_image_container(soup, rule_no, name, part, usename, height):
     else:
         image_path = f"swrlrules/rule_{rule_no}-{part}.png"
     logging.info(f"Adding image path {image_path}")
-    image_tag = soup.new_tag("img", src=image_path,id=part, height="%d"%(height),width="auto",
+    image_tag = soup.new_tag("img", src=image_path,id=part, width="auto",
                              title=f"SWRL {part.capitalize()}")
     text_tag = soup.new_tag("a").string = part.capitalize()
     container.append(text_tag)
