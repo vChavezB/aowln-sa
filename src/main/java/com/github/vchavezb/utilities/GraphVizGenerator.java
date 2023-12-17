@@ -35,8 +35,8 @@ public class GraphVizGenerator {
     private static final String PROPERTY = "Property";
     private static final String BICOLLECTION = "BuiltInCollection";
     private static final String VARIABLE = "Variable";
-    private static final int PIXEL_PER_NODE = 250;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final double IMG_SCALE=7.0;
 
     public boolean produceImage(GraphListsForViz graphListsForViz, File out) {
         NodeInfo[] nodes = graphListsForViz.getNodes();
@@ -90,8 +90,7 @@ public class GraphVizGenerator {
         if (connections.length == 0)
             for (MutableNodeExt node : mutableNodes)
                 graph.add(node.getNode());
-        int imageWidth = nodes.length * PIXEL_PER_NODE;
-        BufferedImage image = Graphviz.fromGraph(graph).width(imageWidth).render(Format.PNG).toImage();
+        BufferedImage image = Graphviz.fromGraph(graph).scale(IMG_SCALE).render(Format.PNG).toImage();
         try {
             out.createNewFile();
             ImageIO.write(image, "png", out);
