@@ -12,7 +12,8 @@ from pathlib import Path
 import shutil
 import os
 
-style_sheet_name = "swrl_style.css"
+style_sheet_name = "swrl-image.css"
+java_script_name = "swrl-image-scale.js"
 
 def create_image_container(soup, rule_no, name, part, usename, height):
     """
@@ -31,7 +32,7 @@ def create_image_container(soup, rule_no, name, part, usename, height):
     else:
         image_path = f"swrlrules/rule_{rule_no}-{part}.png"
     logging.info(f"Adding image path {image_path}")
-    image_tag = soup.new_tag("img", src=image_path, height="%d"%(height),width="auto",
+    image_tag = soup.new_tag("img", src=image_path,id=part, height="%d"%(height),width="auto",
                              title=f"SWRL {part.capitalize()}")
     text_tag = soup.new_tag("a").string = part.capitalize()
     container.append(text_tag)
@@ -125,10 +126,75 @@ def process_directory(directory_path, css_filename, usename=False, height=100):
         if modified_index_content is None:
             continue
 
+        modified_index_content = add_script(modified_index_content)
+        modified_index_content = add_loadEvent(modified_index_content)
+
         with open(index_file_path, 'w', encoding='utf-8') as index_file:
             index_file.write(modified_index_content)
 
         logging.info(f"CSS link added to {index_file_path}")
+
+
+
+def add_loadEvent(html_content):
+    """
+    Add document load event in TOC
+    This allows to load the swrl-image-scale java script
+    to adjust images since Widoco loads crossref section externally
+    Args:
+        html_content:
+
+    Returns:
+
+    """
+    # Parse the HTML content with BeautifulSoup
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # Find the script with the specific content
+    target_script = soup.find('script', string=lambda x: 'loadTOC();' in x if x else False)
+
+    if target_script:
+        # Find the loadTOC() string within the script content
+        loadTOC_string = 'loadTOC();'
+
+        # Find the position of the loadTOC() string within the script content
+        loadTOC_position = target_script.text.find(loadTOC_string)
+
+        if loadTOC_position != -1:
+            # Insert a new line after the loadTOC() method call
+            target_script.contents[0].replace_with(
+                target_script.contents[0][:loadTOC_position + len(loadTOC_string)] +
+                '\t\ndocument.dispatchEvent(new Event("DOMContentLoaded"));' +
+                target_script.contents[0][loadTOC_position + len(loadTOC_string):]
+            )
+
+    # Return the updated HTML content
+    return str(soup)
+def add_script(html_content):
+    """
+    Add the swrl image scale script to the widoco index
+    Args:
+        html_content:
+
+    Returns:
+
+    """
+    # Parse the HTML content with BeautifulSoup
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # Create the script tag
+    script_tag = soup.new_tag('script', src=f'resources/{java_script_name}', defer=True)
+
+    # Append the script tag to the head or body (adjust as needed)
+    head_tag = soup.head
+    if not head_tag:
+        head_tag = soup.new_tag('head')
+        soup.html.insert(0, head_tag)
+
+    head_tag.append(script_tag)
+
+    # Return the updated HTML content
+    return str(soup)
 
 def add_css_link(html_content, css_filename):
     """
@@ -159,6 +225,27 @@ def add_css_link(html_content, css_filename):
     logging.info("CSS link added to HTML.")
     return str(soup)
 
+def change_js_height(file_path, new_max_height):
+    try:
+        # Read the file content
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+        # Find and replace the line containing "var maxHeight ="
+        for i, line in enumerate(lines):
+            if "var maxHeight =" in line:
+                lines[i] = f'var maxHeight = {new_max_height};\n'
+                break
+
+        # Write the modified content back to the file
+        with open(file_path, 'w') as file:
+            file.writelines(lines)
+
+        print(f'Successfully modified {file_path}.')
+    except Exception as e:
+        print(f'Error modifying file: {e}')
+
+
 def main():
     """
     Main function to execute the script.
@@ -177,7 +264,8 @@ def main():
     resources_directory = Path(args.directory_path) / "resources"
     resources_directory.mkdir(exist_ok=True)
     shutil.copy(script_dir / style_sheet_name, resources_directory / style_sheet_name)
-
+    shutil.copy(script_dir / java_script_name, resources_directory / java_script_name)
+    change_js_height(resources_directory / java_script_name,args.height)
     process_directory(args.directory_path, style_sheet_name, args.name,args.height)
 
 if __name__ == "__main__":
