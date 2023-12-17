@@ -1,15 +1,15 @@
 package com.github.vchavezb.utilities;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.swrlapi.core.*;
 import org.swrlapi.factory.SWRLAPIFactory;
 import org.swrlapi.factory.SWRLAPIInternalFactory;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class OWLUtil {
@@ -19,6 +19,44 @@ public class OWLUtil {
     private DefaultPrefixManager prefixManager;
     private Set<SWRLAPIRule> allRules;
 
+    /**
+     * @brief Load prefixes from the ontology document to the swrl iri resolver
+     * @details When creating a new iri resolver for the swrl engine
+     *          the prefixes from the document must be loaded, otherwise
+     *          only the default prefix will be visible.
+     * @param iriResolver the iri resolver used for the swrl engine
+     */
+    private void loadPrefixes(IRIResolver iriResolver) {
+        OWLDocumentFormat format = manager.getOntologyFormat(ontology);
+        if (format.isPrefixOWLOntologyFormat()) {
+            // this is the map you need
+            Map<String, String> map = format.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String prefix = entry.getKey();
+                String iri = entry.getValue();
+                // do not include prefix :
+                if (!Objects.equals(prefix, ":")) {
+                    iriResolver.setPrefix(prefix, iri);
+                }
+            }
+        }
+    }
+
+    private void loadPrefixes(PrefixManager prefixManager) {
+        OWLDocumentFormat format = manager.getOntologyFormat(ontology);
+        if (format.isPrefixOWLOntologyFormat()) {
+            // this is the map you need
+            Map<String, String> map = format.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String prefix = entry.getKey();
+                String iri = entry.getValue();
+                // do not include prefix :
+                if (!Objects.equals(prefix, ":")) {
+                    prefixManager.setPrefix(prefix, iri);
+                }
+            }
+        }
+    }
     public void loadOntology(String filepath) {
         manager = OWLManager.createOWLOntologyManager();
         try {
@@ -26,8 +64,8 @@ public class OWLUtil {
         } catch (OWLOntologyCreationException e) {
             e.printStackTrace();
         }
-
         prefixManager = new DefaultPrefixManager(null, null, ontology.getOntologyID().getOntologyIRI().get().toString() + "#");
+        loadPrefixes(prefixManager);
         allRules = getSWRLRuleEngine().getSWRLRules();
     }
 
@@ -39,8 +77,17 @@ public class OWLUtil {
 
     }
 
+    public OWLOntology getOntology() {
+        return ontology;
+    }
+
+    public PrefixManager getPrefixManager() {
+        return prefixManager;
+    }
+
     public SWRLRuleEngine getSWRLRuleEngine() {
         IRIResolver iriResolver = SWRLAPIFactory.createIRIResolver(prefixManager.getDefaultPrefix());
+        loadPrefixes(iriResolver);
         SWRLRuleEngine ruleEngine = SWRLAPIFactory.createSWRLRuleEngine(ontology, iriResolver);
         return ruleEngine;
     }

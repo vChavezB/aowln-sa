@@ -7,23 +7,86 @@ import org.swrlapi.builtins.arguments.SWRLVariableBuiltInArgument;
 
 import java.rmi.server.UID;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Thomas Farrenkopf on 07.06.2017.
  */
 public class AOWLNEngine {
+    private final String SWRLX_PREFIX = "http://swrl.stanford.edu/ontologies/built-ins/3.3/swrlx.owl#";
+    private final Pattern SWRL_IRI_PATTERN = Pattern.compile("<(.*?)>");
+    private final Pattern DATA_PROPERTY_VALUE_PATTERN = Pattern.compile("\"([^\"]*)\"(\\^\\^)");
+    private PrefixManager prefixManager = null;
 
-    public String stringSplit(String s) {
-        String[] parts = s.split("#");
-        String part2 = parts[parts.length - 1];
-        parts = part2.split(">");
-        part2 = parts[0];
-        parts = part2.split("xsd");
-        String finalString = parts[0];
-        //finalString = finalString.replaceAll("[^a-zA-Z0-9]", "");
-        finalString = finalString.replace("^", "");
-        finalString = finalString.replace("\"", "");
-        return finalString;
+    /**
+     * @brief Set a prefix manager for swrl parsing
+     * @details Prefixes are not shown in SWRL iris
+     *          By setting the prefix manager, the prefixes
+     *          can be appended to the SWRL object labels
+     *          for a better visualization with the prefixes
+     *          from the loaded ontology
+     * @param prefixManager
+     */
+
+    /**
+     * Add prefix manager to resolve IRIS for SWRL objects
+     * @param prefixManager
+     */
+    public void setPrefixManager(PrefixManager prefixManager) {
+        this.prefixManager = prefixManager;
+        // Add swrlx prefix explicitly
+        prefixManager.setPrefix("swrlx:",SWRLX_PREFIX);
+    }
+
+    /**
+     * Get IRI with prefixes from ontology
+     * If an IRI has a prefix use its prefix instead
+     * of the complete IRI.
+     * @param iri
+     * @return
+     */
+    private String getIRIPrefix(IRI iri) {
+        String iriPrefix = prefixManager.getPrefixIRI(iri);
+        // If not found then just return remainder
+        if (iriPrefix == null) {
+            return iri.getRemainder().get();
+        }
+        // Remove default namespace
+        if (iriPrefix.startsWith(":")) {
+            iriPrefix = iriPrefix.substring(1);
+        }
+        return iriPrefix;
+    }
+
+    private String getArgumentValue(SWRLArgument argument) {
+        String argString = argument.toString();
+        // Create a matcher with the input string
+        Matcher iri_match = SWRL_IRI_PATTERN.matcher(argString);
+
+        // If not an iri check if its a data property value
+        if (!iri_match.find()) {
+            Matcher dataprop_val_match = DATA_PROPERTY_VALUE_PATTERN.matcher(argString);
+            if (dataprop_val_match.find()) {
+                return dataprop_val_match.group(1);
+            }
+            return null;
+        }
+        String argument_iri =  iri_match.group(1);
+        IRI predicateIRI = IRI.create(iri_match.group(1));
+        return getIRIPrefix(predicateIRI);
+    }
+
+    private String getPredicateValue(SWRLPredicate predicate) {
+        Matcher iri_match = SWRL_IRI_PATTERN.matcher(predicate.toString());
+        IRI predicateIRI;
+        if (iri_match.find()) {
+            predicateIRI = IRI.create(iri_match.group(1));
+        } else {
+            // Try to get IRI directly if no match
+            predicateIRI = IRI.create(predicate.toString());
+        }
+        return getIRIPrefix(predicateIRI);
     }
 
     public ArrayList<CustomSWRLAtom> createSWRLAtomsForTree(HashSet<SWRLAtom> ruleSegment) {
@@ -36,24 +99,24 @@ public class AOWLNEngine {
 
         for (SWRLAtom element : ruleSegment) {
             if (element instanceof SWRLClassAtom) {
-                String label = stringSplit(element.getPredicate().toString());
-                String key = stringSplit(((SWRLClassAtom) element).getArgument().toString());
+                String label = getPredicateValue(element.getPredicate());
+                String key = getArgumentValue(((SWRLClassAtom) element).getArgument());
                 label = label +"\n("+key+")";
                 ClassAtomCustom classAtom = new ClassAtomCustom(key, label);
                 classAtoms.add(classAtom);
 
             } else if (element instanceof SWRLDataPropertyAtom) {
-                String label = stringSplit(element.getPredicate().toString());
-                String key = stringSplit(((SWRLDataPropertyAtom) element).getSecondArgument().toString());
-                String firstArgument = stringSplit(((SWRLDataPropertyAtom) element).getFirstArgument().toString());
+                String label = getPredicateValue(element.getPredicate());
+                String key = getArgumentValue(((SWRLDataPropertyAtom) element).getSecondArgument());
+                String firstArgument = getArgumentValue(((SWRLDataPropertyAtom) element).getFirstArgument());
                 DataPropertyAtomCustom dataPropAtom = new DataPropertyAtomCustom(firstArgument, key, label);
                 dataPropertyAtoms.add(dataPropAtom);
             } else if (element instanceof SWRLBuiltInAtom) {
                 //bodyBuiltInAtoms.add(element);
                 //   String label = stringSplit(element.getPredicate().toString())+stringSplit(((SWRLBuiltInAtom) element).getArguments().toArray()[1].toString());
                 //    String key = stringSplit(((SWRLBuiltInAtom) element).getArguments().toArray()[1].toString());
-                String key = "BI" + new UID().toString();
-                String label = stringSplit(element.getPredicate().toString());
+                String key = "BI" + new UID();
+                String label = getPredicateValue(element.getPredicate());
                 boolean isBound = false;
 
                 List<String> arguments = new ArrayList<>();
@@ -81,9 +144,9 @@ public class AOWLNEngine {
 
             } else if (element instanceof SWRLObjectPropertyAtom) {
                 //bodyObjectPropertyAtoms.add(element);
-                String label = stringSplit(element.getPredicate().toString());
-                String key = stringSplit(((SWRLObjectPropertyAtom) element).getSecondArgument().toString());
-                String firstArgument = stringSplit(((SWRLObjectPropertyAtom) element).getFirstArgument().toString());
+                String label = getPredicateValue(element.getPredicate());
+                String key = getArgumentValue(((SWRLObjectPropertyAtom) element).getSecondArgument());
+                String firstArgument = getArgumentValue(((SWRLObjectPropertyAtom) element).getFirstArgument());
                 ObjectPropertyAtomCustom objectPropAtom = new ObjectPropertyAtomCustom(firstArgument, key, label);
                 objectPropertyAtoms.add(objectPropAtom);
             }

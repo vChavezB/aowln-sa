@@ -28,8 +28,8 @@ public class AOWLNServiceFacade {
     }
 
     public AOWLNServiceFacade() {
-        this.aowlnEngine = new AOWLNEngine();
         this.owlUtil = new OWLUtil();
+        this.aowlnEngine = new AOWLNEngine();
     }
 
     /**
@@ -40,6 +40,7 @@ public class AOWLNServiceFacade {
     public ArrayList<SWRLAPIRule> getOntologyRules(String file){
         // Create a SWRL rule engine using the SWRLAPI
         this.owlUtil.loadOntology(file);
+        aowlnEngine.setPrefixManager(this.owlUtil.getPrefixManager());
         allRules = owlUtil.getAllRules();
         this.ruleRenderer = owlUtil.getRuleRenderer();
         ArrayList<String> SWRLRulesAsString = new ArrayList<>();
