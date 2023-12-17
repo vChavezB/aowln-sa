@@ -38,6 +38,8 @@ where:
 
 ## Maven
 
+[![](https://jitpack.io/v/vChavezB/aowln-sa.svg)](https://jitpack.io/#vChavezB/aowln-sa)
+
 Add dependency to `pom.xml`:
 
 ```yml
