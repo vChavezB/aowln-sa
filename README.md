@@ -45,7 +45,7 @@ Add dependency to `pom.xml`:
  <dependency>
     <groupId>com.github.vchavezb</groupId>
     <artifactId>aowln-sa</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
   </dependency>
 </dependencies>
 ```
