@@ -15,9 +15,8 @@ import java.util.regex.Pattern;
  */
 public class AOWLNEngine {
     private final String SWRLX_IRI = "http://swrl.stanford.edu/ontologies/built-ins/3.3/swrlx.owl#";
-
+    private final String SQWRL_IRI = "http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl#";
     private final String SWRLB_IRI = "http://www.w3.org/2003/11/swrlb";
-
     private final Pattern SWRL_IRI_PATTERN = Pattern.compile("<(.*?)>");
     private final Pattern DATA_PROPERTY_VALUE_PATTERN = Pattern.compile("\"([^\"]*)\"(\\^\\^)");
     private PrefixManager prefixManager = null;
@@ -41,6 +40,7 @@ public class AOWLNEngine {
         // Add swrl builtin prefixes
         prefixManager.setPrefix("swrlx:",SWRLX_IRI);
         prefixManager.setPrefix("swrlb:",SWRLB_IRI);
+        prefixManager.setPrefix("sqwrl:",SQWRL_IRI);
     }
 
     /**
