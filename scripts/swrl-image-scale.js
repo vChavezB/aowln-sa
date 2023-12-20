@@ -3,7 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var gridContainers = document.querySelectorAll(".grid-container");
 
     // Set your maximum allowed height here
-    var maxHeight = 400;
+	var maxHeight = 400;
+	// Minimum allowed scaled
+	var minScale = 0.12; 
+	// used in case image is caled below minScale
+	var heightComp = 300;
 
     // Function to perform height calculations and styling
     function calculateAndApplyStyles(textElement, bodyElement, headElement, scaleFactor) {
@@ -44,7 +48,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Determine the scaling factor based on the taller image
                 var scaleFactor = maxHeight / Math.max(bodyHeight, headHeight);
-
+				if (scaleFactor < minScale ) {
+					scaleFactor = (maxHeight+heightComp) / Math.max(bodyHeight, headHeight);
+				}
                 calculateAndApplyStyles(textElement, bodyElement, headElement, scaleFactor);
             }
         }
