@@ -192,6 +192,7 @@ public class AOWLNEngine {
             if (swrlAtom instanceof ClassAtomCustom || swrlAtom instanceof ObjectPropertyAtomCustom || swrlAtom instanceof DataPropertyAtomCustom) {
                 standardAtoms.add(swrlAtom);
             } else if (swrlAtom instanceof BuiltInAtomCustom) {
+                // TODO Process correctly different builtins, like select that have multiple arguments
                 String firstArg = ((BuiltInAtomCustom) swrlAtom).getArguments()[0];
                 if (!builtInAtomsMap.keySet().contains(firstArg)) {
                     //collect all builtin with same first arg
@@ -252,6 +253,7 @@ public class AOWLNEngine {
 
         //create AOWLN Elements for builtin
         for (String firstArg : builtInAtomsMap.keySet()) {
+            // TODO Process correctly different builtins, like select that have multiple arguments
             List<BuiltInAtomCustom> relatedBuiltins = builtInAtomsMap.get(firstArg);
             List<BuiltInAtomCustom> boundBuiltin = new ArrayList<>();
 
