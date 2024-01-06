@@ -189,19 +189,39 @@ public class AOWLNEngine {
         Map<String, List<BuiltInAtomCustom>> builtInAtomsMap = new HashMap<>();
 
         for (CustomSWRLAtom swrlAtom : ruleFragment) {
-            if (swrlAtom instanceof ClassAtomCustom || swrlAtom instanceof ObjectPropertyAtomCustom || swrlAtom instanceof DataPropertyAtomCustom) {
+            if (swrlAtom instanceof ClassAtomCustom
+                    || swrlAtom instanceof ObjectPropertyAtomCustom
+                    || swrlAtom instanceof DataPropertyAtomCustom
+               ) {
                 standardAtoms.add(swrlAtom);
             } else if (swrlAtom instanceof BuiltInAtomCustom) {
-                // TODO Process correctly different builtins, like select that have multiple arguments
-                String firstArg = ((BuiltInAtomCustom) swrlAtom).getArguments()[0];
-                if (!builtInAtomsMap.keySet().contains(firstArg)) {
-                    //collect all builtin with same first arg
-                    List<BuiltInAtomCustom> builtinsWithSameFirstArg = new ArrayList<>();
-                    for (CustomSWRLAtom atom : ruleFragment) {
-                        if (atom instanceof BuiltInAtomCustom && ((BuiltInAtomCustom) atom).getArguments()[0].equals(firstArg)) {
-                            builtinsWithSameFirstArg.add((BuiltInAtomCustom) atom);
+                String [] atom_arguments = ((BuiltInAtomCustom) swrlAtom).getArguments();
+                // Experimental parsing of sqwrl:select
+                if (Objects.equals(swrlAtom.getLabel(), "sqwrl:select")
+                    && atom_arguments.length>1) {
+                    for (String arg : atom_arguments) {
+                        if (!builtInAtomsMap.containsKey(arg)) {
+                            //collect all builtin with same first arg
+                            List<BuiltInAtomCustom> builtinsWithSameFirstArg = new ArrayList<>();
+                            for (CustomSWRLAtom atom : ruleFragment) {
+                                if (atom instanceof BuiltInAtomCustom && ((BuiltInAtomCustom) atom).getArguments()[0].equals(arg)) {
+                                    builtinsWithSameFirstArg.add((BuiltInAtomCustom) atom);
+                                }
+                                builtInAtomsMap.put(arg, builtinsWithSameFirstArg);
+                            }
                         }
-                        builtInAtomsMap.put(firstArg, builtinsWithSameFirstArg);
+                    }
+                } else {
+                    String firstArg = atom_arguments[0];
+                    if (!builtInAtomsMap.containsKey(firstArg)) {
+                        //collect all builtin with same first arg
+                        List<BuiltInAtomCustom> builtinsWithSameFirstArg = new ArrayList<>();
+                        for (CustomSWRLAtom atom : ruleFragment) {
+                            if (atom instanceof BuiltInAtomCustom && ((BuiltInAtomCustom) atom).getArguments()[0].equals(firstArg)) {
+                                builtinsWithSameFirstArg.add((BuiltInAtomCustom) atom);
+                            }
+                            builtInAtomsMap.put(firstArg, builtinsWithSameFirstArg);
+                        }
                     }
                 }
             }
