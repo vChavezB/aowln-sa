@@ -28,9 +28,9 @@ def create_image_container(soup, rule_no, name, part, usename, height):
     """
     container = soup.new_tag("div", attrs={"class": "swrl-container"})
     if usename:
-        image_path = f"swrlrules/rule_{name}-{part}.png"
+        image_path = f"swrlrules/rule_{name}-{part}.svg"
     else:
-        image_path = f"swrlrules/rule_{rule_no}-{part}.png"
+        image_path = f"swrlrules/rule_{rule_no}-{part}.svg"
     logging.info(f"Adding image path {image_path}")
     image_tag = soup.new_tag("img", src=image_path,id=part, width="auto",
                              title=f"SWRL {part.capitalize()}")
