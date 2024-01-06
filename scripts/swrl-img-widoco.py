@@ -63,7 +63,7 @@ def add_swrl_images(html_content, usename=False,height=100):
     for i, entity_div in enumerate(entity_divs, start=1):
         name_tag = entity_div.select_one("h3")
         if name_tag:
-            name = name_tag.text.strip().replace(" ","_").replace("back_to_ToC","")
+            name = name_tag.text.strip().replace(" ","_").replace("back_to_ToC_or_SWRL_ToC","")
         else:
             name = "unknown"
 
