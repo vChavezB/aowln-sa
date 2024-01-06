@@ -90,10 +90,9 @@ public class GraphVizGenerator {
         if (connections.length == 0)
             for (MutableNodeExt node : mutableNodes)
                 graph.add(node.getNode());
-        BufferedImage image = Graphviz.fromGraph(graph).scale(IMG_SCALE).render(Format.PNG).toImage();
+
         try {
-            out.createNewFile();
-            ImageIO.write(image, "png", out);
+            Graphviz.fromGraph(graph).scale(IMG_SCALE).render(Format.SVG_STANDALONE).toFile(out);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

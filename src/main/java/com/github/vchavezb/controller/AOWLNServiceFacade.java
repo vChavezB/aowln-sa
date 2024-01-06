@@ -150,14 +150,14 @@ public class AOWLNServiceFacade {
         GraphListsForViz vizListHead = aowlnEngine.megaAlgorithmus(headTree);
         GraphVizGenerator graphVizGenerator = new GraphVizGenerator();
 
-        File body_img = Paths.get(OutDir.toString(), base_name + "-"+"body" + ".png").toFile();
+        File body_img = Paths.get(OutDir.toString(), base_name + "-"+"body" + ".svg").toFile();
         boolean res = graphVizGenerator.produceImage(vizListBody, body_img);
         if (!res) {
             return false;
         }
         logger.info("Generated SWRL Rule [Body]\nRule: " +
                     swrlRule.getBody().toString()+"\nPath: "+body_img);
-        File head_img = Paths.get(OutDir.toString(), base_name + "-"+"head" + ".png").toFile();
+        File head_img = Paths.get(OutDir.toString(), base_name + "-"+"head" + ".svg").toFile();
         res = graphVizGenerator.produceImage(vizListHead, head_img);
         if (!res) {
             return false;
