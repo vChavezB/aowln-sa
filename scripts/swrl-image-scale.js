@@ -11,9 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to perform height calculations and styling
     function calculateAndApplyStyles(textElement, bodyElement, headElement, scaleFactor) {
-        // Apply styles to the text, body, and head elements
-        textElement.style.color = "purple"; // Example: Set text color
-
         // Scale both bodyElement and headElement to the same height
         bodyElement.style.height = bodyElement.clientHeight * scaleFactor + "px";
         bodyElement.style.width = "auto";
