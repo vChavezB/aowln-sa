@@ -10,3 +10,11 @@
   display: grid;
   grid-template-columns: repeat(4, min-content);
 }
+
+polygon {
+    fill: var(--background-color);
+}
+
+text{
+	fill: var(--text-color);
+}
