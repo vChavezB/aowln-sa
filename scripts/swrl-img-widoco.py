@@ -29,8 +29,6 @@ def get_script_directory():
     """
     return Path(os.path.dirname(os.path.abspath(__file__)))
 
-from svgutils.compose import *
-
 class SVG:
     class size:
         def __init__(self, width, height):
