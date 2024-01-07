@@ -20,6 +20,7 @@ java_script_name = "swrl-img-to-svg.js"
 
 ET.register_namespace('', "http://www.w3.org/2000/svg")
 
+
 def get_script_directory():
     """
     Get the directory of the script.
@@ -29,15 +30,17 @@ def get_script_directory():
     """
     return Path(os.path.dirname(os.path.abspath(__file__)))
 
+
 class SVG:
     class size:
         def __init__(self, width, height):
             self.width = width
             self.height = height
+
     def __init__(self, file_path):
         self.height = None
         self.width = None
-        self.file_path= file_path
+        self.file_path = file_path
         self.get_size()
 
     def get_size(self):
@@ -110,8 +113,8 @@ class WidocoSWRL:
     def scaleSVG(self, rule_name):
         body_svg_path = f"swrlrules/rule_{rule_name}-body.svg"
         head_svg_path = f"swrlrules/rule_{rule_name}-head.svg"
-        body = SVG(self.widocoPath/body_svg_path)
-        head = SVG(self.widocoPath/head_svg_path)
+        body = SVG(self.widocoPath / body_svg_path)
+        head = SVG(self.widocoPath / head_svg_path)
         body_ratio = body.width / body.height
         head_ratio = head.width / head.height
         scaleFactor = self.maxHeight / max(body.height, body.height)
@@ -123,8 +126,20 @@ class WidocoSWRL:
             scaleFactor = (self.maxHeight + heightComp) / max(body.height, head.height)
         new_body_height = body.height * scaleFactor
         new_head_height = body.height * scaleFactor
-        body.set_size(new_body_height*body_ratio, new_body_height)
-        head.set_size(new_head_height*head_ratio, new_head_height)
+        new_body_width = new_body_height * body_ratio
+        new_head_width = new_head_height * head_ratio
+        logging.info("Rule " + rule_name + "body.h:" + str(body.height) + " body.w:"
+                     + str(body.width) + " head.h:" + str(head.height) + " head.w:" +
+                     str(head.width)
+                     )
+        logging.info("Scale ratio: "+scaleFactor+" body_ratio:"+body_ratio+
+                     " head_ratio:"+head_ratio)
+        logging.info("Scaled vals: " + rule_name + "body.h:" + str(new_body_height) + " body.w:"
+                     + str(new_body_width) + " head.h:" + str(new_head_width) + " head.w:" +
+                     str(new_head_height)
+                     )
+        body.set_size(new_body_width, new_body_height)
+        head.set_size(new_head_width, new_head_height)
 
     def add_swrl_images(self, html_content):
         """
@@ -155,7 +170,6 @@ class WidocoSWRL:
                 name = "unknown"
 
             paragraphs = entity_div.select("p")
-
 
             for j, paragraph in enumerate(paragraphs, start=1):
                 if self.get_rules:
