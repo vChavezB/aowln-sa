@@ -125,19 +125,9 @@ class WidocoSWRL:
         if scaleFactor < minScale:
             scaleFactor = (self.maxHeight + heightComp) / max(body.height, head.height)
         new_body_height = body.height * scaleFactor
-        new_head_height = body.height * scaleFactor
         new_body_width = new_body_height * body_ratio
+        new_head_height = head.height * scaleFactor
         new_head_width = new_head_height * head_ratio
-        logging.info("Rule " + rule_name + "body.h:" + str(body.height) + " body.w:"
-                     + str(body.width) + " head.h:" + str(head.height) + " head.w:" +
-                     str(head.width)
-                     )
-        logging.info("Scale ratio: "+str(scaleFactor)+" body_ratio:"+str(body_ratio)+
-                     " head_ratio:"+str(head_ratio))
-        logging.info("Scaled vals: " + rule_name + "body.h:" + str(new_body_height) + " body.w:"
-                     + str(new_body_width) + " head.h:" + str(new_head_width) + " head.w:" +
-                     str(new_head_height)
-                     )
         body.set_size(new_body_width, new_body_height)
         head.set_size(new_head_width, new_head_height)
 
