@@ -132,8 +132,8 @@ class WidocoSWRL:
                      + str(body.width) + " head.h:" + str(head.height) + " head.w:" +
                      str(head.width)
                      )
-        logging.info("Scale ratio: "+scaleFactor+" body_ratio:"+body_ratio+
-                     " head_ratio:"+head_ratio)
+        logging.info("Scale ratio: "+str(scaleFactor)+" body_ratio:"+str(body_ratio)+
+                     " head_ratio:"+str(head_ratio))
         logging.info("Scaled vals: " + rule_name + "body.h:" + str(new_body_height) + " body.w:"
                      + str(new_body_width) + " head.h:" + str(new_head_width) + " head.w:" +
                      str(new_head_height)
