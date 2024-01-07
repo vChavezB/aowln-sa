@@ -26,8 +26,8 @@ Where:
 - 
 The output will generate the pattern 
 
-- rule_`X`-`body`.png
-- rule_`X`-`head`.png
+- rule_`X`-`body`.svg
+- rule_`X`-`head`.svg
 
 where:
 - `X`: rule number ordered from declaration in the ontology
