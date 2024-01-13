@@ -37,9 +37,9 @@ public class AOWLNServiceFacade {
      * @param file String path to ontology
      * @return
      */
-    public ArrayList<SWRLAPIRule> getOntologyRules(String file){
+    public ArrayList<SWRLAPIRule> getOntologyRules(String file,ArrayList<String> imports){
         // Create a SWRL rule engine using the SWRLAPI
-        this.owlUtil.loadOntology(file);
+        this.owlUtil.loadOntology(file, imports);
         aowlnEngine.setPrefixManager(this.owlUtil.getPrefixManager());
         allRules = owlUtil.getAllRules();
         this.ruleRenderer = owlUtil.getRuleRenderer();
