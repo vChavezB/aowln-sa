@@ -56,7 +56,7 @@ public class TestLoad {
     @org.junit.Test
     public void loadTest() {
         this.facade = new AOWLNServiceFacade();
-        ArrayList<SWRLAPIRule> swrlrules = this.facade.getOntologyRules("simple.ttl");
+        ArrayList<SWRLAPIRule> swrlrules = this.facade.getOntologyRules("simple.ttl",null);
 
         assertEquals(
                 "Test swrl rules loaded size",

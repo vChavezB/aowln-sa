@@ -19,11 +19,17 @@ public class Cli {
                 .description("Aided Owl Notation generation for SWRL");
         parser.addArgument("ontology").help("Ontology input file with swrl rules");
         parser.addArgument("outputDir").help("Output directory for rules");
+
         parser.addArgument("-name","-n")
                 .help("Concatenate the rule name (i.e., rdfs:label)\n"+
                         "to each rule. Example rule_MyRuleNameFromLabel.png\n"+
                         "default [true]")
                 .type(Boolean.class);
+        parser.addArgument("-import", "-i")
+                .help("Import a local directory to load imports from main ontology")
+                .type(String.class)
+                .nargs("*"); // Allow multiple occurrences of the option
+
         parser.setDefault("name",false);
         Namespace ns = null;
         try {
@@ -38,7 +44,7 @@ public class Cli {
         AOWLNServiceFacade facade;
         facade = new AOWLNServiceFacade();
         logger.info("Loading ontology "+ ontologyPath);
-        ArrayList<SWRLAPIRule> swrlRules = facade.getOntologyRules(ontologyPath);
+        ArrayList<SWRLAPIRule> swrlRules = facade.getOntologyRules(ontologyPath, ns.get("import"));
         File outDir = new File(outputPath);
         if (!outDir.exists()) {
             if (!outDir.mkdir()) {
@@ -52,7 +58,11 @@ public class Cli {
             if (ns.getBoolean("name")) {
                 image_name = "rule_"+rule.getRuleName().replace(" ","_");
             }
-            boolean res = facade.produceRuleImage(outDir.toPath(), image_name, rule);
+            try {
+                boolean res = facade.produceRuleImage(outDir.toPath(), image_name, rule);
+            } catch (Exception e){
+                logger.error("Could not generate rule "+rule.getRuleName()+"\n"+e);
+            }
         }
 
     }

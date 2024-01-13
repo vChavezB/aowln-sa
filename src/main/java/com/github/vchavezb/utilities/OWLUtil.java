@@ -2,11 +2,13 @@ package com.github.vchavezb.utilities;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.util.AutoIRIMapper;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.swrlapi.core.*;
 import org.swrlapi.factory.SWRLAPIFactory;
 import org.swrlapi.factory.SWRLAPIInternalFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -57,9 +59,18 @@ public class OWLUtil {
             }
         }
     }
-    public void loadOntology(String filepath) {
+    public void loadOntology(String filepath, ArrayList<String> imports) {
         manager = OWLManager.createOWLOntologyManager();
         try {
+            if (imports!=null){
+                for (String importDir : imports) {
+                    File importDirFile = new File(importDir);
+                    if (importDirFile.exists()) {
+                        AutoIRIMapper mapper = new AutoIRIMapper(importDirFile, true);
+                        manager.getIRIMappers().add(mapper);
+                    }
+                }
+            }
             ontology = manager.loadOntologyFromOntologyDocument(FileUtil.getInputStream(filepath));
         } catch (OWLOntologyCreationException e) {
             e.printStackTrace();
