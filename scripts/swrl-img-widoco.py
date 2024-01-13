@@ -117,12 +117,12 @@ class WidocoSWRL:
         head = SVG(self.widocoPath / head_svg_path)
         body_ratio = body.width / body.height
         head_ratio = head.width / head.height
-        if body.height < maxHeight and body.height < head.height:
-            scaleFactor = maxHeight / head.height
-        elif head.height < maxHeight and head.height < body.height:
-            scaleFactor = maxHeight / body.height
+        if body.height < self.maxHeight and body.height < head.height:
+            scaleFactor = self.maxHeight / head.height
+        elif head.height < self.maxHeight and head.height < body.height:
+            scaleFactor = self.maxHeight / body.height
         else:
-            scaleFactor = maxHeight / max(body.height, body.height)
+            scaleFactor = self.maxHeight / max(body.height, body.height)
         # Minimum allowed scaled
         minScale = 0.12
         # used in case image is caled below minScale
