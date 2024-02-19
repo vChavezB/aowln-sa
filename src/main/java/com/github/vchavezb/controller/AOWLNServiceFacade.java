@@ -40,6 +40,7 @@ public class AOWLNServiceFacade {
     public ArrayList<SWRLAPIRule> getOntologyRules(String file,ArrayList<String> imports){
         // Create a SWRL rule engine using the SWRLAPI
         this.owlUtil.loadOntology(file, imports);
+        aowlnEngine.setOntology(this.owlUtil.getOntology());
         aowlnEngine.setPrefixManager(this.owlUtil.getPrefixManager());
         allRules = owlUtil.getAllRules();
         this.ruleRenderer = owlUtil.getRuleRenderer();

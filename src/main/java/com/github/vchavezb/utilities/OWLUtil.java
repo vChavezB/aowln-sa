@@ -2,6 +2,7 @@ package com.github.vchavezb.utilities;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.AutoIRIMapper;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.swrlapi.core.*;
@@ -9,10 +10,9 @@ import org.swrlapi.factory.SWRLAPIFactory;
 import org.swrlapi.factory.SWRLAPIInternalFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class OWLUtil {
 
@@ -66,7 +66,7 @@ public class OWLUtil {
                 for (String importDir : imports) {
                     File importDirFile = new File(importDir);
                     if (importDirFile.exists()) {
-                        AutoIRIMapper mapper = new AutoIRIMapper(importDirFile, true);
+                        IRIMapper mapper = new IRIMapper(importDirFile, true,true);
                         manager.getIRIMappers().add(mapper);
                     }
                 }
@@ -120,5 +120,61 @@ public class OWLUtil {
         }
         return null;
     }
+
+    /**
+     * Search for an rdfs:label based on the language preference and an ontology
+     * @param entity OWLEntity whose rdfs:label will be searched
+     * @param langPrefix Preferred language
+     * @param ontology Ontology used as reference for the search
+     * @return OWLAnnotation with the rdfs:label
+     */
+    private static Optional<OWLAnnotation> getLabel(OWLEntity entity, String langPrefix, OWLOntology ontology) {
+        List<OWLAnnotation> annotationList = EntitySearcher.getAnnotations(entity, ontology).stream().collect(Collectors.toList());
+
+        Predicate<OWLAnnotation> isValidLabel = annotation ->
+                annotation.getProperty().isLabel() &&
+                        annotation.getValue().asLiteral().isPresent();
+
+        Optional<OWLAnnotation> labelWithLang = annotationList.stream()
+                .filter(isValidLabel.and(annotation ->
+                        annotation.getValue().asLiteral().get().getLang().equals(langPrefix)))
+                .findFirst();
+
+        if (labelWithLang.isPresent()) {
+            return labelWithLang; // Found the annotation with the specified langPrefix
+        }
+
+        // If langPrefix is not found, try to find the annotation with langPrefix = ""
+        Optional<OWLAnnotation> labelWithEmptyLang = annotationList.stream()
+                .filter(isValidLabel.and(annotation ->
+                        annotation.getValue().asLiteral().get().getLang().isEmpty()))
+                .findFirst();
+
+        if (labelWithEmptyLang.isPresent()) {
+            return labelWithEmptyLang; // Found the annotation with langPrefix = ""
+        }
+
+        // If neither langPrefix nor "" is found, return the first available label
+        return annotationList.stream()
+                .filter(isValidLabel)
+                .findFirst();
+    }
+
+
+    public static Optional<OWLAnnotation> getLabelAnnotation(OWLEntity entity, String langPrefix,OWLOntology ont) {
+        Optional<OWLAnnotation> label = getLabel(entity, langPrefix, ont);
+        if (!label.isEmpty()) return label;
+
+        // Check imported ontologies
+        for (OWLOntology importedOntology : ont.getImports()) {
+            String importedIRI = importedOntology.getOntologyID().getOntologyIRI().get().toString();
+            label = getLabel(entity, langPrefix, importedOntology);
+            if (!label.isEmpty()) return label;
+        }
+
+        return Optional.empty();
+    }
+
+
 
 }
