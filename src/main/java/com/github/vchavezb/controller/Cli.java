@@ -23,7 +23,7 @@ public class Cli {
         parser.addArgument("-name","-n")
                 .help("Concatenate the rule name (i.e., rdfs:label)\n"+
                         "to each rule. Example rule_MyRuleNameFromLabel.png\n"+
-                        "default [true]")
+                        "default [false]")
                 .type(Boolean.class);
         parser.addArgument("-import", "-i")
                 .help("Import a local directory to load imports from main ontology")
