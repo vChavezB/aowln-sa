@@ -62,8 +62,18 @@ public class GraphVizGenerator {
         }
         NodeConnection[] connections = graphListsForViz.getConnections();
         for (NodeConnection connection : connections) {
-            String childCaption = connection.getChild().getCaption();
-            String parentCaption = connection.getParent().getCaption();
+            if (connection == null)
+                continue;
+            NodeInfo childConn = connection.getChild();
+            NodeInfo parentConn = connection.getParent();
+            String childCaption = new String();
+            String parentCaption = new String();
+            if (childConn != null) {
+                childCaption += childConn.getCaption();
+            }
+            if (parentConn != null) {
+                parentCaption += parentConn.getCaption();
+            }
             MutableNodeExt child = null, parent = null;
             for (MutableNodeExt mutableNodeExt : mutableNodes) {
                 if (mutableNodeExt.getNode().name().toString().equals(childCaption)) {

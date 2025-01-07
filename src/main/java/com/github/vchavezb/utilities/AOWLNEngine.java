@@ -434,6 +434,14 @@
             for (int i = 0; i < aowlnEdges.values().size(); i++) {
     
                 AOWLNEdgeElement element = (AOWLNEdgeElement) aowlnEdges.values().toArray()[i];
+                AOWLNElement from = element.getFrom();
+                AOWLNElement to = element.getTo();
+                if (from == null) {
+                    continue;
+                }
+                if (to == null) {
+                    continue;
+                }
                 NodeInfo nodeInfoParent = getNodeInfo(nodes, element.getFrom().getIdentifier());
                 NodeInfo nodeInfoChild = getNodeInfo(nodes, element.getTo().getIdentifier());
                 EdgeTypeEnum edgeTypeEnum = element.getEdgeType();
