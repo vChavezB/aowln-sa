@@ -111,6 +111,7 @@
                     <finalName>${project.artifactId}-${project.version}</finalName>
                     <archive>
                         <manifest>
+			    <addClasspath>true</addClasspath>
                             <mainClass>com.github.vchavezb.controller.Cli</mainClass>
                         </manifest>
                     </archive>
