@@ -157,14 +157,14 @@ public class AOWLNServiceFacade {
             return false;
         }
         logger.info("Generated SWRL Rule [Body]\nRule: " +
-                    swrlRule.getBody().toString()+"\nPath: "+body_img);
+                    swrlRule.getBody()+"\nPath: "+body_img);
         File head_img = Paths.get(OutDir.toString(), base_name + "-"+"head" + ".svg").toFile();
         res = graphVizGenerator.produceImage(vizListHead, head_img);
         if (!res) {
             return false;
         }
         logger.info("Generated SWRL Rule [Head]\nRule: " +
-                swrlRule.getHead().toString()+"\nPath: "+head_img);
+                swrlRule.getHead()+"\nPath: "+head_img);
         return true;
     }
 
