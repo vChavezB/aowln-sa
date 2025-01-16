@@ -3,6 +3,8 @@
     
     import com.github.vchavezb.model.*;
     import org.semanticweb.owlapi.model.*;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
     import org.swrlapi.builtins.arguments.SWRLVariableBuiltInArgument;
     
     import java.rmi.server.UID;
@@ -23,10 +25,12 @@
     public class AOWLNEngine {
         private final String SWRLX_IRI = "http://swrl.stanford.edu/ontologies/built-ins/3.3/swrlx.owl#";
         private final String SQWRL_IRI = "http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl#";
-        private final String SWRLB_IRI = "http://www.w3.org/2003/11/swrlb";
+        private final String SWRLB_IRI = "http://www.w3.org/2003/11/swrlb#";
+        private final String SWRL_IRI = "http://www.w3.org/2003/11/swrl#";
         private final Pattern SWRL_IRI_PATTERN = Pattern.compile("<(.*?)>");
         private final Pattern DATA_PROPERTY_VALUE_PATTERN = Pattern.compile("\"([^\"]*)\"(\\^\\^)");
         private PrefixManager prefixManager = null;
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
         private OWLOntology ontology;
 
@@ -54,6 +58,8 @@
             prefixManager.setPrefix("swrlx:",SWRLX_IRI);
             prefixManager.setPrefix("swrlb:",SWRLB_IRI);
             prefixManager.setPrefix("sqwrl:",SQWRL_IRI);
+            prefixManager.setPrefix("swrl:",SWRL_IRI);
+
         }
     
         /**
@@ -186,6 +192,11 @@
                     String firstArgument = getArgumentValue(((SWRLObjectPropertyAtom) element).getFirstArgument());
                     ObjectPropertyAtomCustom objectPropAtom = new ObjectPropertyAtomCustom(firstArgument, key, label);
                     objectPropertyAtoms.add(objectPropAtom);
+                } else if (element instanceof SWRLSameIndividualAtom) {
+                    String firstArgument = getArgumentValue(((SWRLSameIndividualAtom) element).getFirstArgument());
+                    String secondArgument = getArgumentValue(((SWRLSameIndividualAtom) element).getSecondArgument());
+                    ObjectPropertyAtomCustom objectPropAtom = new ObjectPropertyAtomCustom(firstArgument, secondArgument,"owl:SameAs");
+                    objectPropertyAtoms.add(objectPropAtom);
                 }
             }
     
@@ -222,6 +233,7 @@
             Map<String, List<BuiltInAtomCustom>> builtInAtomsMap = new HashMap<>();
     
             for (CustomSWRLAtom swrlAtom : ruleFragment) {
+                logger.info("Label of Atom: " + swrlAtom.getLabel());
                 if (swrlAtom instanceof ClassAtomCustom
                         || swrlAtom instanceof ObjectPropertyAtomCustom
                         || swrlAtom instanceof DataPropertyAtomCustom
